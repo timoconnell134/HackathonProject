@@ -1,24 +1,28 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text } from "react-native-paper";
+import { db, collection, addDoc } from "../firebaseConfig";
 
-export default function AddMedicationScreen({ navigation, theme, setMedications, medications }) {
+export default function AddMedicationScreen({ navigation, theme }) {
     const { colors } = theme;
     const [name, setName] = useState("");
     const [time, setTime] = useState("");
 
-    function handleSave() {
+    async function handleSave() {
         if (!name || !time) {
             Alert.alert("Error", "Please enter both medication name and time.");
             return;
         }
 
-        // Add new medication to the list
-        const newMedication = { id: `${medications.length + 1}`, name, time };
-        setMedications([...medications, newMedication]);
-
-        Alert.alert("Success", `Medication "${name}" added at ${time}`);
-        navigation.goBack();
+        try {
+            // Save to Firestore
+            await addDoc(collection(db, "medications"), { name, time });
+            Alert.alert("Success", `Medication "${name}" added at ${time}`);
+            navigation.goBack();
+        } catch (error) {
+            Alert.alert("Error", "Failed to save medication.");
+            console.error("Firestore Error: ", error);
+        }
     }
 
     return (

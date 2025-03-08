@@ -31,7 +31,12 @@ export default function App() {
             }}
           >
             {({ navigation }) => (
-              <HomeScreen navigation={navigation} theme={theme} medications={medications} />
+              <HomeScreen
+                navigation={navigation}
+                theme={theme}
+                medications={medications}
+                setMedications={setMedications}
+              />
             )}
           </Stack.Screen>
           <Stack.Screen name="AddMedication">
