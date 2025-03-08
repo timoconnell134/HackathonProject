@@ -1,21 +1,22 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-// Your Firebase configuration
+// ✅ Make sure this API key matches the one from Firebase Console
 const firebaseConfig = {
     apiKey: "AIzaSyB8LedLeX71L577_h6ZqSDHwU92RXlFyzU",
     authDomain: "medication-app-f0c6e.firebaseapp.com",
     projectId: "medication-app-f0c6e",
-    storageBucket: "medication-app-f0c6e.appspot.com", // ✅ Fixed
+    storageBucket: "medication-app-f0c6e.appspot.com",
     messagingSenderId: "420249075816",
     appId: "1:420249075816:web:47b0448711195d834b3bdd",
-    measurementId: "G-ENVK9VJFN6" // (Can be removed, optional)
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// ✅ Prevent multiple Firebase instances
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-console.log("✅ Firebase has been initialized successfully!");
+console.log("✅ Firebase initialized successfully!");
 
-export { db, collection, addDoc, getDocs, deleteDoc, doc };
+export { auth, db };

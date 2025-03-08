@@ -11,7 +11,7 @@ export default function AddMedicationScreen({ navigation, theme, medications, se
     const [showPicker, setShowPicker] = useState(false);
 
     // Format time for display
-    const formattedTime = time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+    const formattedTime = selectedTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
 
     function handleSave() {
         if (!name) {
