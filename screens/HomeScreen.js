@@ -1,51 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, FlatList, StyleSheet, Alert } from "react-native";
 import { Button, Card, Text, IconButton } from "react-native-paper";
-import { db, collection, getDocs, deleteDoc, doc } from "../firebaseConfig";
 import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
 
-export default function HomeScreen({ navigation, theme }) {
+export default function HomeScreen({ navigation, theme, medications, setMedications }) {
     const { colors } = theme;
-    const [medications, setMedications] = useState([]);
-
-    // Function to fetch medications from Firestore
-    async function fetchMedications() {
-        try {
-            const querySnapshot = await getDocs(collection(db, "medications"));
-            const meds = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-            setMedications(meds);
-        } catch (error) {
-            Alert.alert("Error", "Failed to load medications.");
-            console.error("Firestore Error: ", error);
-        }
-    }
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", fetchMedications);
-        return unsubscribe;
-    }, [navigation]);
 
     // Function to delete a medication
-    async function deleteMedication(id) {
+    function deleteMedication(id) {
         Alert.alert("Delete", "Are you sure you want to delete this medication?", [
             { text: "Cancel", style: "cancel" },
             {
                 text: "Delete",
                 style: "destructive",
-                onPress: async () => {
-                    try {
-                        await deleteDoc(doc(db, "medications", id));
-                        fetchMedications(); // Refresh the list
-                    } catch (error) {
-                        Alert.alert("Error", "Failed to delete medication.");
-                        console.error("Firestore Error: ", error);
-                    }
+                onPress: () => {
+                    // ✅ Remove the medication from state
+                    setMedications((prevMedications) => prevMedications.filter((med) => med.id !== id));
                 },
             },
         ]);
     }
 
-    // Render the delete action when swiping left
+    // Swipeable delete action
     const renderRightActions = (id) => (
         <View style={styles.deleteContainer}>
             <IconButton icon="delete" size={24} iconColor="white" onPress={() => deleteMedication(id)} />

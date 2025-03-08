@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const [medications, setMedications] = useState([]); // Store medications
+  const [medications, setMedications] = useState([]); // ✅ Store medications globally
 
   const theme = darkMode ? MD3DarkTheme : MD3LightTheme;
 
@@ -35,7 +35,7 @@ export default function App() {
                 navigation={navigation}
                 theme={theme}
                 medications={medications}
-                setMedications={setMedications}
+                setMedications={setMedications} // ✅ Pass state
               />
             )}
           </Stack.Screen>
@@ -44,8 +44,8 @@ export default function App() {
               <AddMedicationScreen
                 navigation={navigation}
                 theme={theme}
-                setMedications={setMedications}
                 medications={medications}
+                setMedications={setMedications} // ✅ Pass state
               />
             )}
           </Stack.Screen>
